@@ -1,10 +1,25 @@
+import Home from '@/pages/notes/Home';
+import Trash from '@/pages/notes/Trash';
+import Archive from '@/pages/notes/Archive';
+import Collaboration from '@/pages/notes/Collabs';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Home from '@/pages/home/Home';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />,
+  },
+  {
+    path: '/archive',
+    element: <Archive />,
+  },
+  {
+    path: '/collaboration',
+    element: <Collaboration />,
+  },
+  {
+    path: '/trash',
+    element: <Trash />,
   },
 ]);
 
