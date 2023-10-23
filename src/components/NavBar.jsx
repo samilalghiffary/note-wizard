@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SunIcon, MoonIcon } from '@heroicons/react/24/solid';
+import { SunIcon, MoonIcon, Bars3Icon } from '@heroicons/react/24/solid';
 
 const NavBar = () => {
   const [theme, setTheme] = useState(
@@ -24,13 +24,19 @@ const NavBar = () => {
   return (
     <div className="navbar bg-secondary">
       <div className="container flex flex-row">
-        <div className="basis-2/4">
+        <div className="basis-2/6">
+          <label htmlFor="my-drawer" className="btn btn-circle btn-ghost">
+            <Bars3Icon className="w-8 h-8" />
+          </label>
+        </div>
+
+        <div className="basis-2/6">
           <div className="form-control">
             <input type="text" placeholder="Search note" className="input input-bordered w-full" />
           </div>
         </div>
 
-        <div className="basis-2/4 flex gap-2 justify-end">
+        <div className="basis-2/6 flex gap-2 justify-end">
           <button className="btn btn-circle btn-ghost">
             <label className="swap swap-rotate">
               <input
