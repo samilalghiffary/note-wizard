@@ -8,15 +8,15 @@ import {
   BsSortNumericUpAlt,
 } from 'react-icons/bs';
 
-const Main = ({ notes }) => {
+const Main = ({ notes, heading, paragraph, emptyNoteImage }) => {
   return (
     <>
       {notes.length === 0 ? (
-        <EmptyNote />
+        <EmptyNote emptyNoteImage={emptyNoteImage} paragraph={paragraph} heading={heading} />
       ) : (
         <div className="container h-screen flex gap-4 flex-col p-5">
           <div className="flex justify-between">
-            <h1 className="text-3xl">Notes</h1>
+            <h1 className="text-3xl">{heading}</h1>
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost normal-case">
                 Sort by
