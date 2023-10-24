@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import notes from '@/utils/notes';
 import Main from './components/Main';
 import Drawer from '@/components/Drawer';
 import NavBar from '@/components/NavBar';
 import ModalInput from './components/ModalInput';
 import FloatingButton from './components/FloatingButton';
-import notes from '@/utils/notes';
+import writingWizard from '@/assets/writing-wizard.png';
 
 const Home = () => {
   const [isAddNote, setIsAddNote] = useState(false);
@@ -21,9 +22,10 @@ const Home = () => {
     <Drawer currentPage="notes">
       <NavBar />
       <Main
-        onAddNoteClose={onAddNoteClose}
-        isAddNote={isAddNote}
-        onAddNoteHandler={onAddNoteHandler}
+        heading="Notes"
+        emptyNoteImage={writingWizard}
+        paragraph=" Your notes are currently empty. You may want to consider adding a new note.
+      </p>"
         notes={notes}
       />
       {isAddNote ? <ModalInput isAddNote={isAddNote} onAddNoteClose={onAddNoteClose} /> : null}
