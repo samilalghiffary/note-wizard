@@ -14,7 +14,7 @@ const Main = ({ notes, heading, paragraph, emptyNoteImage }) => {
       {notes.length === 0 ? (
         <EmptyNote emptyNoteImage={emptyNoteImage} paragraph={paragraph} heading={heading} />
       ) : (
-        <div className="container h-screen flex gap-4 flex-col p-5">
+        <div className="container min-h-screen flex gap-4 flex-col p-5">
           <div className="flex justify-between">
             <h1 className="text-3xl">{heading}</h1>
             <div className="dropdown dropdown-end">
