@@ -10,7 +10,7 @@ const Drawer = ({ children, currentPage }) => {
     <div className="drawer">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">{children}</div>
-      <div className="drawer-side">
+      <div className="drawer-side z-10">
         <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
         <ul className="menu px-4 w-60 h-full bg-secondary-focus">
           <div className="container p-1 gap-2 flex flex-row justify-start items-center">
