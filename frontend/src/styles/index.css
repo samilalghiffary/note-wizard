@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.my-background-image {
+  background-image: url(../assets/auth-background.jpeg);
+  background-size: cover;
+}
