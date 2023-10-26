@@ -9,13 +9,19 @@ const FormPanel = ({ isLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(isLogin ? loginSchema : registerSchema) });
 
   const onSubmitHandler = (data) => {
     console.log(data);
-    navigate('/');
+    if (isLogin) {
+      navigate('/notes');
+    } else {
+      reset();
+      navigate('/login');
+    }
   };
 
   const onShowPasswordHandler = (e) => {
@@ -27,7 +33,7 @@ const FormPanel = ({ isLogin }) => {
   };
 
   return (
-    <div className="basis-5/12 flex justify-center items-center flex-col p-5">
+    <div className="w-full lg:basis-5/12 flex justify-center items-center flex-col p-5">
       <h3 className="text-2xl self-start mb-3">{isLogin ? 'Login' : 'Register'}</h3>
       <form className="w-full" onSubmit={handleSubmit(onSubmitHandler)}>
         <div className={`form-control ${errors.username ? '' : 'mb-1'}`}>
@@ -41,7 +47,7 @@ const FormPanel = ({ isLogin }) => {
             autoComplete="true"
             placeholder="username"
             {...register('username')}
-            className={`input input-sm ${errors.username ? 'input-error' : ''}`}
+            className={`input ${errors.username ? 'input-error' : ''}`}
           />
           {errors.username ? (
             <label className="label pb-0">
@@ -59,7 +65,7 @@ const FormPanel = ({ isLogin }) => {
             id="password"
             placeholder="password"
             type={showPassword ? 'text' : 'password'}
-            className={`input input-sm ${errors.password ? 'input-error' : ''}`}
+            className={`input ${errors.password ? 'input-error' : ''}`}
             {...register('password')}
           />
           {errors.password ? (
@@ -81,7 +87,7 @@ const FormPanel = ({ isLogin }) => {
               id="confirmPassword"
               placeholder="Confirm password"
               type={showPassword ? 'text' : 'password'}
-              className={`input input-sm ${errors.confirmPassword ? 'input-error' : ''}`}
+              className={`input ${errors.confirmPassword ? 'input-error' : ''}`}
               {...register('confirmPassword')}
             />
             {errors.confirmPassword ? (
@@ -103,7 +109,7 @@ const FormPanel = ({ isLogin }) => {
             />
           </label>
         </div>
-        <button type="submit" className="btn btn-sm btn-secondary w-full normal-case">
+        <button type="submit" className="btn btn-secondary w-full normal-case">
           {isLogin ? 'Login' : 'Register'}
         </button>
       </form>

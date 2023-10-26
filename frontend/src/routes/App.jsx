@@ -1,14 +1,21 @@
 import Home from '@/pages/notes/Home';
 import Trash from '@/pages/notes/Trash';
 import Archive from '@/pages/notes/Archive';
-import Login from '@/pages/auth/desktop/Login';
 import Collaboration from '@/pages/notes/Collabs';
-import Register from '@/pages/auth/desktop/Register';
+import MobileIndex from '@/pages/auth/mobile/Index';
+import MobileAuth from '@/pages/auth/mobile/MobileAuth';
+import DesktopAuth from '@/pages/auth/desktop/DesktopAuth';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+const isDesktop = window.matchMedia('(min-width: 768px)').matches;
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: isDesktop ? <DesktopAuth isLogin={true} /> : <MobileIndex />,
+  },
+  {
+    path: '/notes',
     element: <Home />,
   },
   {
@@ -25,11 +32,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Login />,
+    element: isDesktop ? <DesktopAuth isLogin={true} /> : <MobileAuth isLogin={true} />,
   },
   {
     path: '/register',
-    element: <Register />,
+    element: isDesktop ? <DesktopAuth isLogin={false} /> : <MobileAuth isLogin={false} />,
   },
 ]);
 
