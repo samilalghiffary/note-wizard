@@ -31,7 +31,7 @@ const NavBar = () => {
             <input
               type="text"
               placeholder="Search note"
-              className="input input-sm md:input-md input-bordered w-full"
+              className="input input-md input-bordered w-full"
             />
           </div>
         </div>
