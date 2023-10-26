@@ -20,7 +20,7 @@ const Drawer = ({ children, currentPage }) => {
           <div className="divider m-0"></div>
           <ul className="menu gap-2">
             <li>
-              <Link to="/" className={currentPage === 'notes' ? 'focus' : ''}>
+              <Link to="/notes" className={currentPage === 'notes' ? 'focus' : ''}>
                 <BookOpenIcon className="h-6 w-6" />
                 My notes
               </Link>
