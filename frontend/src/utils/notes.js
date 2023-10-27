@@ -1,10 +1,11 @@
-const notes = [
+const getNotes = () => [
   {
     title: 'Catatan Pertama',
     tags: 'penting',
     body: 'Ini adalah isi dari catatan pertama.',
     date: '2023-10-24',
     time: '10:30 AM',
+    id: '1',
   },
   {
     title: 'Catatan Kedua',
@@ -12,6 +13,7 @@ const notes = [
     body: 'Ini adalah isi dari catatan kedua.',
     date: '2023-10-25',
     time: '2:45 PM',
+    id: '2',
   },
   {
     title: 'Catatan Ketiga',
@@ -19,6 +21,7 @@ const notes = [
     body: 'Ini adalah isi dari catatan ketiga.',
     date: '2023-10-26',
     time: '4:15 PM',
+    id: '3',
   },
   {
     title: 'Catatan Pertama',
@@ -26,6 +29,7 @@ const notes = [
     body: 'Ini adalah isi yang lebih panjang dari catatan pertama. Ini adalah contoh catatan dengan isi yang lebih banyak dan bisa berlanjut ke beberapa paragraf.\n\nMisalnya, di sini kita bisa menambahkan beberapa paragraf lagi untuk membuat catatan ini lebih panjang.\n\nCatatan ini juga bisa berisi informasi yang lebih detail atau apa pun yang Anda butuhkan.',
     date: '2023-10-24',
     time: '10:30 AM',
+    id: '4',
   },
   {
     title: 'Catatan Kedua',
@@ -33,6 +37,7 @@ const notes = [
     body: 'Ini adalah isi yang lebih panjang dari catatan kedua. Anda bisa menambahkan lebih banyak isi seperti yang Anda inginkan. Catatan ini juga bisa berisi daftar, tautan, atau elemen lain sesuai kebutuhan.',
     date: '2023-10-25',
     time: '2:45 PM',
+    id: '5',
   },
   {
     title: 'Catatan Ketiga',
@@ -40,7 +45,8 @@ const notes = [
     body: 'Ini adalah isi yang lebih panjang dari catatan ketiga. Anda bisa terus menambahkan teks ke dalam catatan ini. Ini mungkin berisi informasi yang lebih rinci atau catatan yang panjang.',
     date: '2023-10-26',
     time: '4:15 PM',
+    id: '6',
   },
 ];
 
-export default notes;
+export default getNotes;

@@ -8,7 +8,7 @@ import {
   BsSortNumericUpAlt,
 } from 'react-icons/bs';
 
-const Main = ({ notes, heading, paragraph, emptyNoteImage }) => {
+const Main = ({ notes, heading, paragraph, emptyNoteImage, onNoteClick }) => {
   return (
     <>
       {notes.length === 0 ? (
@@ -49,7 +49,7 @@ const Main = ({ notes, heading, paragraph, emptyNoteImage }) => {
               </ul>
             </div>
           </div>
-          <CardList notes={notes} />
+          <CardList onNoteClick={onNoteClick} notes={notes} />
         </div>
       )}
     </>
