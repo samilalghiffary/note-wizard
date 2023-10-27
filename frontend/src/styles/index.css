@@ -2,7 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.my-background-image {
-  background-image: url(../assets/auth-background.jpeg);
-  background-size: cover;
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
 }
