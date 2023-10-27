@@ -47,7 +47,7 @@ const FormPanel = ({ isLogin }) => {
             autoComplete="true"
             placeholder="username"
             {...register('username')}
-            className={`input ${errors.username ? 'input-error' : ''}`}
+            className={`input lg:input-sm ${errors.username ? 'input-error' : ''}`}
           />
           {errors.username ? (
             <label className="label pb-0">
@@ -65,7 +65,7 @@ const FormPanel = ({ isLogin }) => {
             id="password"
             placeholder="password"
             type={showPassword ? 'text' : 'password'}
-            className={`input ${errors.password ? 'input-error' : ''}`}
+            className={`input lg:input-sm ${errors.password ? 'input-error' : ''}`}
             {...register('password')}
           />
           {errors.password ? (
@@ -87,7 +87,7 @@ const FormPanel = ({ isLogin }) => {
               id="confirmPassword"
               placeholder="Confirm password"
               type={showPassword ? 'text' : 'password'}
-              className={`input ${errors.confirmPassword ? 'input-error' : ''}`}
+              className={`input lg:input-sm ${errors.confirmPassword ? 'input-error' : ''}`}
               {...register('confirmPassword')}
             />
             {errors.confirmPassword ? (
@@ -109,7 +109,7 @@ const FormPanel = ({ isLogin }) => {
             />
           </label>
         </div>
-        <button type="submit" className="btn btn-secondary w-full normal-case">
+        <button type="submit" className="btn lg:btn-sm btn-secondary w-full normal-case">
           {isLogin ? 'Login' : 'Register'}
         </button>
       </form>
