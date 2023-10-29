@@ -14,6 +14,10 @@ export const registerSchema = z
       .string()
       .min(3, { message: 'Username must have at least 3 character' })
       .max(10, { message: 'Maximum character for username is 10' }),
+    fullname: z
+      .string()
+      .min(3, { message: 'Fullname must have at least 3 character' })
+      .max(10, { message: 'Maximum character for fullname is 10' }),
     password: z.string().min(8, { message: 'Password must have at least 8 character' }),
     confirmPassword: z
       .string()

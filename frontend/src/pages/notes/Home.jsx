@@ -1,20 +1,23 @@
 import { useState } from 'react';
-
-import Main from './components/Main';
+import Main from './components/Notes';
 import Drawer from '@/components/Drawer';
 import NavBar from '@/components/NavBar';
-import ModalInput from './components/ModalInput';
+import { useNotes } from '@/utils/context/Notes';
 import writingWizard from '@/assets/writing-wizard.png';
-import FloatingButton from './components/FloatingButton';
-import ModalDetailNote from './components/ModalDetailNote';
-import getNotes from '@/utils/notes';
-
-const notes = getNotes();
+import FloatingButton from '../../components/FloatingButton';
+import ModalInput from '../../components/modal/ModalAddNote';
+import ModalDetailNote from '../../components/modal/ModalDetailNote';
+import ModalAddCollaborator from '../../components/modal/ModalAddCollaborator';
 
 const Home = () => {
-  const [isAddNote, setIsAddNote] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { notes } = useNotes();
   const [id, setId] = useState();
+  const [isAddNote, setIsAddNote] = useState(false);
+  const [modalState, setModalState] = useState({
+    isDetailModalOpen: false,
+    isCollabModalOpen: false,
+  });
+  const { isCollabModalOpen, isDetailModalOpen } = modalState;
 
   const onAddNoteHandler = () => {
     setIsAddNote(!isAddNote);
@@ -27,11 +30,21 @@ const Home = () => {
   const onNoteClickHandler = (e) => {
     const id = e.currentTarget.id;
     setId(id);
-    setIsModalOpen(true);
+    setModalState((prevState) => ({ ...prevState, isDetailModalOpen: true }));
   };
 
-  const onCloseModalHandler = () => {
-    setIsModalOpen(false);
+  const onCloseDetailModalHandler = (e) => {
+    e.preventDefault();
+    setModalState((prevState) => ({ ...prevState, isDetailModalOpen: false }));
+  };
+
+  const onCloseCollabModalHandler = (e) => {
+    e.preventDefault();
+    setModalState((prevState) => ({ ...prevState, isCollabModalOpen: false }));
+  };
+
+  const onAddCollaboratorHandler = () => {
+    setModalState((prevState) => ({ ...prevState, isCollabModalOpen: true }));
   };
 
   return (
@@ -44,8 +57,20 @@ const Home = () => {
         paragraph="Your notes are currently empty. You may want to consider adding a new note."
         notes={notes}
       />
-      {isModalOpen && (
-        <ModalDetailNote id={id} onCloseModal={onCloseModalHandler} onOpenModal={isModalOpen} />
+      {isDetailModalOpen && (
+        <ModalDetailNote
+          id={id}
+          openDetailModal={isDetailModalOpen}
+          closeDetailModal={onCloseDetailModalHandler}
+          onAddCollaborator={onAddCollaboratorHandler}
+        />
+      )}
+      {isCollabModalOpen && (
+        <ModalAddCollaborator
+          id={id}
+          openCollabModal={isCollabModalOpen}
+          closeCollabModal={onCloseCollabModalHandler}
+        />
       )}
       {isAddNote && <ModalInput isAddNote={isAddNote} onAddNoteClose={onAddNoteClose} />}
       <FloatingButton isAddNote={isAddNote} onAddNoteHandler={onAddNoteHandler} />

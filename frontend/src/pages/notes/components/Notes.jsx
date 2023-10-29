@@ -8,7 +8,7 @@ import {
   BsSortNumericUpAlt,
 } from 'react-icons/bs';
 
-const Main = ({ notes, heading, paragraph, emptyNoteImage, onNoteClick }) => {
+const Notes = ({ notes, heading, paragraph, emptyNoteImage, onNoteClick }) => {
   return (
     <>
       {notes.length === 0 ? (
@@ -56,4 +56,4 @@ const Main = ({ notes, heading, paragraph, emptyNoteImage, onNoteClick }) => {
   );
 };
 
-export default Main;
+export default Notes;

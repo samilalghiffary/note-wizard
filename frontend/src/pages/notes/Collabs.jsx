@@ -1,10 +1,12 @@
-import notes from '@/utils/notes';
-import Main from './components/Main';
+import Main from './components/Notes';
 import Drawer from '@/components/Drawer';
 import NavBar from '@/components/NavBar';
 import collabWizard from '@/assets/collab-wizard.png';
+import { useNotes } from '@/utils/context/Notes';
 
 const Collaboration = () => {
+  const { notes } = useNotes();
+
   return (
     <Drawer currentPage="collaboration">
       <NavBar />

@@ -1,21 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useToken } from '@/utils/context/Token';
+import { useTheme } from '@/utils/context/Theme';
 import { SunIcon, MoonIcon, Bars3Icon } from '@heroicons/react/24/solid';
 
-const savedTheme = localStorage.getItem('theme') || 'halloween';
-
 const NavBar = () => {
-  const [theme, setTheme] = useState(savedTheme);
+  const { logout } = useToken();
+  const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
-  const onThemeChange = () => {
-    setTheme(theme === 'halloween' ? 'pastel' : 'halloween');
+  const onLogoutHandler = async () => {
+    let message;
+    try {
+      message = await logout();
+      alert(message);
+      navigate('/login');
+    } catch (error) {
+      alert(error);
+    }
   };
 
-  useEffect(() => {
-    localStorage.setItem('theme', theme);
-    const localTheme = localStorage.getItem('theme');
-
-    document.querySelector('html').setAttribute('data-theme', localTheme);
-  }, [theme]);
+  const onThemeChange = () => {
+    toggleTheme();
+  };
 
   return (
     <div className="navbar sticky shadow-lg top-0 z-10 bg-secondary">
@@ -50,7 +56,7 @@ const NavBar = () => {
 
           <div className="dropdown dropdown-end">
             <div className="container flex items-center gap-1 md:gap-2">
-              <p className="text-sm md:text-base font-medium block">Samil</p>
+              {/* <p className="text-sm md:text-base font-medium block">Samil</p> */}
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
                   <img src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Buster" />
@@ -67,7 +73,7 @@ const NavBar = () => {
                 </button>
               </li>
               <li>
-                <a>Logout</a>
+                <button onClick={onLogoutHandler}>Logout</button>
               </li>
             </ul>
           </div>

@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
-import { UserGroupIcon, BookOpenIcon, ArchiveBoxIcon, TrashIcon } from '@heroicons/react/24/solid';
-import wizardIcon from '@/assets/wizard-icon.png';
 import githubIcon from '@/assets/github.png';
 import linkedIcon from '@/assets/linkedin.png';
+import wizardIcon from '@/assets/wizard-icon.png';
+import { UserGroupIcon, BookOpenIcon, ArchiveBoxIcon, TrashIcon } from '@heroicons/react/24/solid';
 
-// eslint-disable-next-line react/prop-types
 const Drawer = ({ children, currentPage }) => {
   return (
     <div className="drawer">
