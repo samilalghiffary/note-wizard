@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useToken } from '@/utils/context/Token';
 import { Link, useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useToken } from '@/utils/context/Token';
 import { loginSchema, registerSchema } from '@/utils/validator/authSchema';
 
 const FormPanel = ({ isLogin }) => {
@@ -15,27 +15,25 @@ const FormPanel = ({ isLogin }) => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(isLogin ? loginSchema : registerSchema) });
 
-  const { login, authRegister } = useToken();
+  const { authLogin, authRegister } = useToken();
 
   const onSubmitHandler = async (data) => {
     const { username, password, fullname } = data;
 
+    let message;
     try {
-      let message;
-
       if (!isLogin) {
         message = await authRegister(username, password, fullname);
         reset();
+        alert(message);
         navigate('/login');
       } else {
-        message = await login(username, password);
+        message = await authLogin(username, password);
+        alert(message);
         navigate('/notes');
       }
-
-      alert(message);
     } catch (error) {
-      alert(error);
-      reset();
+      alert(message);
     }
   };
 

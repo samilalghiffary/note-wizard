@@ -18,7 +18,7 @@ export const TokenProvider = ({ children }) => {
     });
   };
 
-  const login = (username, password) => {
+  const authLogin = (username, password) => {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await axiosWithConfig.post('/authentications', { username, password });
@@ -54,7 +54,7 @@ export const TokenProvider = ({ children }) => {
   };
 
   return (
-    <TokenContext.Provider value={{ accessToken, refreshToken, authRegister, login, logout }}>
+    <TokenContext.Provider value={{ accessToken, refreshToken, authRegister, authLogin, logout }}>
       {children}
     </TokenContext.Provider>
   );
