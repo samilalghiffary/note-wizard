@@ -25,59 +25,71 @@ export const NotesProvider = ({ children }) => {
     }
   };
 
-  const addNote = async (title, body) => {
-    try {
-      const response = await axiosWithConfig.post(
-        '/notes',
-        {
-          title,
-          body,
-        },
-        {
+  const addNote = (title, body) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axiosWithConfig.post(
+          '/notes',
+          {
+            title,
+            body,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        resolve('Added note successfully');
+        const noteId = response.data.data.noteId;
+        const newNote = await getNoteById(noteId);
+        setNotes((prevNotes) => [...prevNotes, newNote]);
+      } catch (error) {
+        reject('Failed to adding note');
+        console.error('Gagal menambahkan catatan', error);
+      }
+    });
+  };
+
+  const deleteNote = (noteId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await axiosWithConfig.delete(`/notes/${noteId}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        }
-      );
-      const noteId = response.data.data.noteId;
-      const newNote = await getNoteById(noteId);
-      setNotes((prevNotes) => [...prevNotes, newNote]);
-    } catch (error) {
-      console.error('Gagal menambahkan catatan', error);
-    }
+        });
+        resolve('Delete note successfully');
+        setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+      } catch (error) {
+        reject('Failed to delete note');
+        console.error('Gagal menghapus catatan', error);
+      }
+    });
   };
 
-  const deleteNote = async (noteId) => {
-    try {
-      await axiosWithConfig.delete(`/notes/${noteId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
-    } catch (error) {
-      console.error('Gagal menghapus catatan', error);
-    }
-  };
-
-  const editNote = async (noteId, title, body) => {
-    try {
-      await axiosWithConfig.put(
-        `/notes/${noteId}`,
-        { title, body },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      const updatedNotes = notes.map((note) =>
-        note.id === noteId ? { ...note, title, body } : note
-      );
-      setNotes(updatedNotes);
-    } catch (error) {
-      console.error('Gagal mengubah catatan', error);
-    }
+  const editNote = (noteId, title, body) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await axiosWithConfig.put(
+          `/notes/${noteId}`,
+          { title, body },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        resolve('Edit note successfully');
+        const updatedNotes = notes.map((note) =>
+          note.id === noteId ? { ...note, title, body } : note
+        );
+        setNotes(updatedNotes);
+      } catch (error) {
+        reject('Failed to edit note');
+        console.error('Gagal mengubah catatan', error);
+      }
+    });
   };
 
   const getNoteById = async (id) => {
@@ -91,7 +103,6 @@ export const NotesProvider = ({ children }) => {
       return note;
     } catch (error) {
       console.error('Gagal mengambil detail catatan', error);
-      throw error;
     }
   };
 
@@ -109,7 +120,6 @@ export const NotesProvider = ({ children }) => {
           },
         }
       );
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
