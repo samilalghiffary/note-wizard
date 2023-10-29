@@ -1,10 +1,10 @@
 import { BsPlusLg, BsXLg } from 'react-icons/bs';
 
-const FloatingButton = ({ isAddNote, onAddNoteHandler }) => {
+const FloatingButton = ({ isAddNote, openAddNoteModal }) => {
   return (
     <div className="fixed bottom-4 right-4">
       <button
-        onClick={onAddNoteHandler}
+        onClick={openAddNoteModal}
         className="btn btn-circle btn-secondary shadow-md shadow-secondary-focus w-14 h-14"
       >
         <label className={`swap swap-rotate ${!isAddNote ? 'swap-active' : ''}`}>

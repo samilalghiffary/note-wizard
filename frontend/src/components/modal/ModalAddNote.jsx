@@ -1,27 +1,18 @@
-import { useNotes } from '@/utils/context/Notes';
 import { useForm } from 'react-hook-form';
 
-const ModalInput = ({ isAddNote, onAddNoteClose }) => {
+const ModalAddNote = ({ openModal, closeModal, addNote }) => {
   const {
-    reset,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { addNote } = useNotes();
-
-  const onAddNoteSubmitted = async (data) => {
-    const { title, body } = data;
-    addNote(title, body);
-    reset();
-  };
 
   return (
     <>
-      <dialog id="input-modal" className={`modal ${isAddNote ? 'modal-open' : ''}`}>
+      <dialog id="input-modal" className={`modal ${openModal ? 'modal-open' : ''}`}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Add note</h3>
-          <form onSubmit={handleSubmit(onAddNoteSubmitted)} className="flex flex-col gap-2">
+          <form onSubmit={handleSubmit(addNote)} className="flex flex-col gap-2">
             <div className="form-control w-full">
               <label className="label">
                 <span className={`label-text ${errors.title ? 'text-error' : ''}`}>Title</span>
@@ -61,7 +52,7 @@ const ModalInput = ({ isAddNote, onAddNoteClose }) => {
               </button>
               <button
                 type="reset"
-                onClick={onAddNoteClose}
+                onClick={closeModal}
                 className="btn btn-sm btn-outline btn-secondary w-20"
               >
                 Cancel
@@ -74,4 +65,4 @@ const ModalInput = ({ isAddNote, onAddNoteClose }) => {
   );
 };
 
-export default ModalInput;
+export default ModalAddNote;

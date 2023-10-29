@@ -4,7 +4,7 @@ import { useNotes } from '@/utils/context/Notes';
 import { formatISODate, formatISOTime } from '@/utils/dateFormatter';
 import { BsArchiveFill, BsFillTrashFill, BsPersonFillAdd } from 'react-icons/bs';
 
-const ModalDetailNote = ({ id, openDetailModal, closeDetailModal, onAddCollaborator }) => {
+const ModalDetailNote = ({ id, openModal, closeModal, openCollaboratorModal }) => {
   const { getNoteById, editNote, deleteNote } = useNotes();
   const { register, setValue, handleSubmit, reset } = useForm();
   const [detailNote, setDetailNote] = useState({
@@ -12,13 +12,11 @@ const ModalDetailNote = ({ id, openDetailModal, closeDetailModal, onAddCollabora
     time: '',
     owner: '',
   });
-
   const { date, time, owner } = detailNote;
 
   useEffect(() => {
     getNoteById(id)
       .then((note) => {
-        console.log(note);
         setValue('title', note.title);
         setValue('body', note.body);
         setDetailNote({
@@ -29,7 +27,7 @@ const ModalDetailNote = ({ id, openDetailModal, closeDetailModal, onAddCollabora
         });
       })
       .catch((error) => console.error(error));
-  }, [id, getNoteById, setValue]);
+  }, []);
 
   const onEditHandler = (data) => {
     const { title, body } = data;
@@ -44,7 +42,7 @@ const ModalDetailNote = ({ id, openDetailModal, closeDetailModal, onAddCollabora
 
   return (
     <>
-      <dialog id={id} className={`modal ${openDetailModal ? 'modal-open' : ''}`}>
+      <dialog id={id} className={`modal ${openModal ? 'modal-open' : ''}`}>
         <div className="card w-11/12 lg:w-96 max-h-96 card-compact bg-secondary">
           <form onSubmit={handleSubmit(onEditHandler)}>
             <div className="card-body">
@@ -54,7 +52,6 @@ const ModalDetailNote = ({ id, openDetailModal, closeDetailModal, onAddCollabora
                   type="text"
                   className="bg-secondary text-lg focus:outline-none"
                 />
-                <div className="badge badge-error"></div>
               </div>
               <textarea
                 autoFocus
@@ -71,7 +68,7 @@ const ModalDetailNote = ({ id, openDetailModal, closeDetailModal, onAddCollabora
                 <div className="gap-1 flex">
                   <div
                     id={id}
-                    onClick={onAddCollaborator}
+                    onClick={openCollaboratorModal}
                     className="btn btn-circle btn-ghost btn-sm"
                   >
                     <div
@@ -99,8 +96,11 @@ const ModalDetailNote = ({ id, openDetailModal, closeDetailModal, onAddCollabora
                   </div>
                 </div>
                 <div className="gap-2 flex">
-                  <button className="btn btn-primary btn-sm">Submit</button>
-                  <button onClick={closeDetailModal} className="btn btn-primary btn-sm">
+                  <button className="btn btn-primary btn-sm normal-case">Submit</button>
+                  <button
+                    onClick={closeModal}
+                    className="btn btn-primary btn-outline btn-sm normal-case"
+                  >
                     Close
                   </button>
                 </div>

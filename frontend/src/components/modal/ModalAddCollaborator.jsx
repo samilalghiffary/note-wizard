@@ -2,8 +2,13 @@ import { useNotes } from '@/utils/context/Notes';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-const ModalAddCollaborator = ({ openCollabModal, closeCollabModal, id }) => {
-  const { register, handleSubmit, setValue } = useForm();
+const ModalAddCollaborator = ({ openModal, closeModal, id }) => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
   const { addCollaborator } = useNotes();
 
   useEffect(() => {
@@ -17,31 +22,35 @@ const ModalAddCollaborator = ({ openCollabModal, closeCollabModal, id }) => {
 
   return (
     <div>
-      <dialog className={`modal bg-secondary ${openCollabModal ? 'modal-open' : ''}`}>
-        <div className="modal-box bg-secondary">
+      <dialog className={`modal bg-secondary ${openModal ? 'modal-open' : ''}`}>
+        <div className="modal-box w-80 bg-secondary">
           <h3 className="font-bold text-lg">Add collaborator</h3>
           <form onSubmit={handleSubmit(onAddCollaboratorHandler)}>
             <div className="form-control w-full">
               <label className="label">
-                <span className="label-text">Username</span>
+                <span className={`label-text ${errors.username ? 'text-error' : ''}`}>
+                  Username
+                </span>
               </label>
               <input
                 type="text"
-                placeholder="Type username user you want to collaborating"
-                className="input input-md input-bordered w-full bg-inherit"
-                {...register('userId', { required: 'Username is required' })}
+                placeholder="Type here"
+                className={`input input-md input-bordered ${
+                  errors.username ? 'input-error' : ''
+                } w-full bg-inherit `}
+                {...register('username', { required: 'Username is required' })}
               />
-              <input
-                type="text"
-                placeholder="Type username user you want to collaborating"
-                className="hidden"
-                {...register('noteId')}
-              />
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  {errors.username ? errors.username.message : ''}
+                </span>
+              </label>
+              <input type="text" className="hidden" {...register('noteId')} />
             </div>
             <div className="modal-action">
               <button className="btn btn-sm btn-primary normal-case">Add Collaboration</button>
               <button
-                onClick={closeCollabModal}
+                onClick={closeModal}
                 className="btn btn-sm btn-primary btn-outline normal-case"
               >
                 Close

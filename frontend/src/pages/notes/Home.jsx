@@ -1,30 +1,34 @@
 import { useState } from 'react';
-import Main from './components/Notes';
+import Notes from './components/Notes';
 import Drawer from '@/components/Drawer';
 import NavBar from '@/components/NavBar';
 import { useNotes } from '@/utils/context/Notes';
 import writingWizard from '@/assets/writing-wizard.png';
 import FloatingButton from '../../components/FloatingButton';
-import ModalInput from '../../components/modal/ModalAddNote';
+import ModalAddNote from '../../components/modal/ModalAddNote';
 import ModalDetailNote from '../../components/modal/ModalDetailNote';
 import ModalAddCollaborator from '../../components/modal/ModalAddCollaborator';
 
 const Home = () => {
   const { notes } = useNotes();
   const [id, setId] = useState();
-  const [isAddNote, setIsAddNote] = useState(false);
   const [modalState, setModalState] = useState({
+    isAddNoteModalOpen: false,
     isDetailModalOpen: false,
     isCollabModalOpen: false,
   });
-  const { isCollabModalOpen, isDetailModalOpen } = modalState;
+  const { isCollabModalOpen, isDetailModalOpen, isAddNoteModalOpen } = modalState;
 
-  const onAddNoteHandler = () => {
-    setIsAddNote(!isAddNote);
+  const openAddNoteModal = () => {
+    setModalState((prevState) => ({ ...prevState, isAddNoteModalOpen: true }));
   };
 
-  const onAddNoteClose = () => {
-    setIsAddNote(false);
+  const closeAddNoteModal = () => {
+    setModalState((prevState) => ({ ...prevState, isAddNoteModalOpen: false }));
+  };
+
+  const addNoteHandler = (data) => {
+    console.log(data);
   };
 
   const onNoteClickHandler = (e) => {
@@ -33,7 +37,7 @@ const Home = () => {
     setModalState((prevState) => ({ ...prevState, isDetailModalOpen: true }));
   };
 
-  const onCloseDetailModalHandler = (e) => {
+  const closeDetailModal = (e) => {
     e.preventDefault();
     setModalState((prevState) => ({ ...prevState, isDetailModalOpen: false }));
   };
@@ -43,37 +47,43 @@ const Home = () => {
     setModalState((prevState) => ({ ...prevState, isCollabModalOpen: false }));
   };
 
-  const onAddCollaboratorHandler = () => {
+  const openCollaboratorModal = () => {
     setModalState((prevState) => ({ ...prevState, isCollabModalOpen: true }));
   };
 
   return (
     <Drawer currentPage="notes">
       <NavBar />
-      <Main
+      <Notes
+        notes={notes}
         heading="Notes"
         onNoteClick={onNoteClickHandler}
         emptyNoteImage={writingWizard}
         paragraph="Your notes are currently empty. You may want to consider adding a new note."
-        notes={notes}
       />
       {isDetailModalOpen && (
         <ModalDetailNote
           id={id}
-          openDetailModal={isDetailModalOpen}
-          closeDetailModal={onCloseDetailModalHandler}
-          onAddCollaborator={onAddCollaboratorHandler}
+          openModal={isDetailModalOpen}
+          closeModal={closeDetailModal}
+          openCollaboratorModal={openCollaboratorModal}
         />
       )}
       {isCollabModalOpen && (
         <ModalAddCollaborator
           id={id}
-          openCollabModal={isCollabModalOpen}
-          closeCollabModal={onCloseCollabModalHandler}
+          openModal={isCollabModalOpen}
+          closeModal={onCloseCollabModalHandler}
         />
       )}
-      {isAddNote && <ModalInput isAddNote={isAddNote} onAddNoteClose={onAddNoteClose} />}
-      <FloatingButton isAddNote={isAddNote} onAddNoteHandler={onAddNoteHandler} />
+      {isAddNoteModalOpen && (
+        <ModalAddNote
+          addNote={addNoteHandler}
+          openModal={isAddNoteModalOpen}
+          closeModal={closeAddNoteModal}
+        />
+      )}
+      <FloatingButton isAddNote={isAddNoteModalOpen} openAddNoteModal={openAddNoteModal} />
     </Drawer>
   );
 };
