@@ -45,7 +45,9 @@ const ModalInput = ({ isAddNote, onAddNoteClose }) => {
               <textarea
                 placeholder="Type here"
                 {...register('body', { required: 'Body is required' })}
-                className={`textarea textarea-bordered ${errors.body ? 'textarea-error' : ''}`}
+                className={`textarea textarea-md text-md h-32 textarea-bordered ${
+                  errors.body ? 'textarea-error' : ''
+                }`}
               ></textarea>
               <label className="label">
                 <span className="label-text-alt text-error">
