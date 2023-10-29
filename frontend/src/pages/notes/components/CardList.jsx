@@ -8,8 +8,8 @@ const CardList = ({ notes, onNoteClick }) => {
           key={index}
           id={note.id}
           body={note.body}
-          date={note.date}
-          time={note.time}
+          date={note.createdAt}
+          time={note.createdAt}
           title={note.title}
           onNoteClick={onNoteClick}
         />
