@@ -4,9 +4,16 @@ import { useNotes } from '@/utils/context/Notes';
 import { formatISODate, formatISOTime } from '@/utils/dateFormatter';
 import { BsArchiveFill, BsFillTrashFill, BsPersonFillAdd } from 'react-icons/bs';
 
-const ModalDetailNote = ({ id, openModal, closeModal, openCollaboratorModal }) => {
-  const { getNoteById, editNote, deleteNote } = useNotes();
-  const { register, setValue, handleSubmit, reset } = useForm();
+const ModalDetailNote = ({
+  id,
+  openModal,
+  closeModal,
+  openCollaboratorModal,
+  editNote,
+  deleteNote,
+}) => {
+  const { getNoteById } = useNotes();
+  const { register, setValue, handleSubmit } = useForm();
   const [detailNote, setDetailNote] = useState({
     date: '',
     time: '',
@@ -29,24 +36,13 @@ const ModalDetailNote = ({ id, openModal, closeModal, openCollaboratorModal }) =
       .catch((error) => console.error(error));
   }, []);
 
-  const onEditHandler = (data) => {
-    const { title, body } = data;
-
-    editNote(id, title, body);
-    reset();
-  };
-
-  const onDeleteHandler = () => {
-    deleteNote(id);
-  };
-
   return (
     <>
-      <dialog id={id} className={`modal ${openModal ? 'modal-open' : ''}`}>
+      <dialog className={`modal ${openModal ? 'modal-open' : ''}`}>
         <div className="card w-11/12 lg:w-96 max-h-96 card-compact bg-secondary">
-          <form onSubmit={handleSubmit(onEditHandler)}>
+          <form onSubmit={handleSubmit(editNote)}>
             <div className="card-body">
-              <div className="card-title justify-between">
+              <div id={id} className="card-title justify-between">
                 <input
                   {...register('title')}
                   type="text"
@@ -86,7 +82,7 @@ const ModalDetailNote = ({ id, openModal, closeModal, openCollaboratorModal }) =
                       <BsArchiveFill className="w-5 h-5 cursor-pointer" />
                     </div>
                   </div>
-                  <div onClick={onDeleteHandler} className="btn btn-circle btn-ghost btn-sm">
+                  <div id={id} onClick={deleteNote} className="btn btn-circle btn-ghost btn-sm">
                     <div
                       className="tooltip tooltip-bottom normal-case tooltip-primary"
                       data-tip="Delete note"
