@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useToken } from '@/utils/context/Token';
 import { useTheme } from '@/utils/context/Theme';
+import wizardAvatar from '@/assets/wizard-avatar.png';
 import { SunIcon, MoonIcon, Bars3Icon } from '@heroicons/react/24/solid';
 
 const NavBar = () => {
@@ -59,7 +60,7 @@ const NavBar = () => {
               {/* <p className="text-sm md:text-base font-medium block">Samil</p> */}
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
-                  <img src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Buster" />
+                  <img className="image-full" src={wizardAvatar} />
                 </div>
               </label>
             </div>
