@@ -6,7 +6,7 @@ const NotesContext = createContext();
 
 export const NotesProvider = ({ children }) => {
   const { accessToken } = useToken();
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(null);
 
   useEffect(() => {
     getNotes(accessToken, setNotes);
@@ -62,8 +62,7 @@ export const NotesProvider = ({ children }) => {
         resolve('Delete note successfully');
         setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
       } catch (error) {
-        reject('Failed to delete note');
-        console.error('Gagal menghapus catatan', error);
+        reject(error.response.data.message);
       }
     });
   };
@@ -107,27 +106,38 @@ export const NotesProvider = ({ children }) => {
   };
 
   const addCollaborator = async (noteId, userId) => {
-    try {
-      const response = await axiosWithConfig.post(
-        '/collaborations',
-        {
-          noteId,
-          userId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
+    return new Promise(async (resolve, reject) => {
+      try {
+        await axiosWithConfig.post(
+          '/collaborations',
+          {
+            noteId,
+            userId,
           },
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        resolve('Collaboration added successfully');
+      } catch (error) {
+        reject('Failed adding collaboration');
+        console.error(error);
+      }
+    });
   };
 
   return (
     <NotesContext.Provider
-      value={{ notes, getNotes, addNote, deleteNote, editNote, getNoteById, addCollaborator }}
+      value={{
+        notes,
+        addNote,
+        editNote,
+        deleteNote,
+        getNoteById,
+        addCollaborator,
+      }}
     >
       {children}
     </NotesContext.Provider>
