@@ -1,11 +1,57 @@
+import OpenAI from 'openai';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+
+const openai = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
 
 const ModalAddNote = ({ openModal, closeModal, addNote, isLoading }) => {
+  const [generateResume, setGenerateResume] = useState(false);
   const {
+    watch,
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const generatingResume = async (prompt) => {
+    try {
+      const response = await openai.chat.completions.create({
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Anda adalah pembuat rangkuman, anda akan diberikan catatan dan tugas anda adalah merangkum catatan tersebut dengan singkat, padat dan jelas',
+          },
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+        model: 'gpt-3.5-turbo',
+      });
+      const resume = response.choices[0].message.content;
+      setValue('body', resume);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setGenerateResume(false);
+    }
+  };
+
+  const onGenerateResumeHandler = async () => {
+    setGenerateResume(true);
+    const prompt = watch('body');
+    toast.promise(generatingResume(prompt), {
+      loading: 'Generating resume',
+      success: 'Successfully generating resume',
+      error: 'Error occurs when generating resume, please try again',
+    });
+  };
 
   return (
     <>
@@ -46,8 +92,15 @@ const ModalAddNote = ({ openModal, closeModal, addNote, isLoading }) => {
                 </span>
               </label>
             </div>
-            <div className="justify-between flex">
-              <div className="flex gap-2">
+            <div className="flex justify-between">
+              <div onClick={onGenerateResumeHandler} className="btn btn-neutral btn-sm normal-case">
+                {generateResume ? (
+                  <span className="loading loading-spinner loading-sm"></span>
+                ) : (
+                  'Generate resume'
+                )}
+              </div>
+              <div className="flex gap-1">
                 <button type="submit" className="btn btn-sm btn-neutral w-20 normal-case">
                   {isLoading ? (
                     <span className="loading loading-spinner loading-sm"></span>
