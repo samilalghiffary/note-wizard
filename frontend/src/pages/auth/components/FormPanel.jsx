@@ -9,8 +9,8 @@ const FormPanel = ({ isLogin }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const {
-    register,
     reset,
+    register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(isLogin ? loginSchema : registerSchema) });
@@ -20,20 +20,21 @@ const FormPanel = ({ isLogin }) => {
   const onSubmitHandler = async (data) => {
     const { username, password, fullname } = data;
 
-    let message;
     try {
       if (!isLogin) {
-        message = await authRegister(username, password, fullname);
-        reset();
+        const message = await authRegister(username, password, fullname);
         alert(message);
+        reset();
         navigate('/login');
       } else {
-        message = await authLogin(username, password);
+        const message = await authLogin(username, password);
         alert(message);
         navigate('/notes');
       }
     } catch (error) {
-      alert(message);
+      if (error === 'Kredensial yang Anda berikan salah') {
+        alert('Incorrect username and password');
+      }
     }
   };
 
@@ -148,11 +149,11 @@ const FormPanel = ({ isLogin }) => {
               type="checkbox"
               id="show-password-toggle"
               onChange={onShowPasswordHandler}
-              className="toggle toggle-secondary toggle-sm"
+              className="toggle toggle-primary toggle-sm"
             />
           </label>
         </div>
-        <button type="submit" className="btn lg:btn-sm btn-secondary w-full normal-case">
+        <button type="submit" className="btn lg:btn-sm btn-neutral w-full normal-case">
           {isLogin ? 'Login' : 'Register'}
         </button>
       </form>

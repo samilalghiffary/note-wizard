@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import MainPanel from './components/MainPanel';
+import MainPanel from '../components/MainPanel';
 
 const DesktopAuth = ({ isLogin }) => {
   useEffect(() => {
