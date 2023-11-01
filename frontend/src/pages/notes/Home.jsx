@@ -3,15 +3,17 @@ import Notes from './components/Notes';
 import Drawer from '@/components/Drawer';
 import NavBar from '@/components/NavBar';
 import { useNotes } from '@/utils/context/Notes';
+import toast, { Toaster } from 'react-hot-toast';
 import writingWizard from '@/assets/writing-wizard.png';
 import FloatingButton from '../../components/FloatingButton';
 import ModalAddNote from '../../components/modal/ModalAddNote';
 import ModalDetailNote from '../../components/modal/ModalDetailNote';
 import ModalAddCollaborator from '../../components/modal/ModalAddCollaborator';
-import toast, { Toaster } from 'react-hot-toast';
 
 const Home = () => {
   const [id, setId] = useState();
+  const [keyword, setKeyword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { notes, addNote, editNote, deleteNote } = useNotes();
   const [modalState, setModalState] = useState({
     isAddNoteModalOpen: false,
@@ -19,6 +21,20 @@ const Home = () => {
     isCollabModalOpen: false,
   });
   const { isCollabModalOpen, isDetailModalOpen, isAddNoteModalOpen } = modalState;
+
+  const onSearchHandler = (keyword) => {
+    setKeyword(keyword);
+  };
+
+  const filteredNotes = notes
+    ? notes.filter((note) => note.title.toLowerCase().includes(keyword.toLowerCase()))
+    : null;
+
+  const openDetailModal = (e) => {
+    const id = e.currentTarget.id;
+    setId(id);
+    setModalState((prevState) => ({ ...prevState, isDetailModalOpen: true }));
+  };
 
   const openAddNoteModal = () => {
     setModalState((prevState) => ({ ...prevState, isAddNoteModalOpen: true }));
@@ -29,6 +45,7 @@ const Home = () => {
   };
 
   const addNoteHandler = async (data) => {
+    setIsLoading(true);
     const { title, body } = data;
 
     let message;
@@ -38,14 +55,10 @@ const Home = () => {
     } catch (error) {
       console.error(error);
       toast.error(message);
+    } finally {
+      setModalState((prevState) => ({ ...prevState, isAddNoteModalOpen: false }));
+      setIsLoading(false);
     }
-    setModalState((prevState) => ({ ...prevState, isAddNoteModalOpen: false }));
-  };
-
-  const onNoteClickHandler = (e) => {
-    const id = e.currentTarget.id;
-    setId(id);
-    setModalState((prevState) => ({ ...prevState, isDetailModalOpen: true }));
   };
 
   const closeDetailModal = (e) => {
@@ -77,24 +90,27 @@ const Home = () => {
   };
 
   const deleteNoteHandler = async () => {
-    let message;
     try {
-      message = await deleteNote(id);
+      let message = await deleteNote(id);
       toast.success(message);
     } catch (error) {
-      toast.error(message);
+      let errorMessage = 'Anda tidak berhak mengakses resource ini';
+      if (error === errorMessage) {
+        errorMessage = 'You cannot delete collaborated note';
+      }
+      toast.error(errorMessage);
     }
     setModalState((prevState) => ({ ...prevState, isDetailModalOpen: false }));
   };
 
   return (
     <Drawer currentPage="notes">
-      <NavBar />
+      <NavBar searchNote={onSearchHandler} />
       <Notes
-        notes={notes}
+        notes={filteredNotes}
         heading="Notes"
         emptyNoteImage={writingWizard}
-        onNoteClick={onNoteClickHandler}
+        openModal={openDetailModal}
         paragraph="Your notes are currently empty. You may want to consider adding a new note."
       />
       {isDetailModalOpen && (
@@ -116,6 +132,7 @@ const Home = () => {
       )}
       {isAddNoteModalOpen && (
         <ModalAddNote
+          isLoading={isLoading}
           addNote={addNoteHandler}
           openModal={isAddNoteModalOpen}
           closeModal={closeAddNoteModal}

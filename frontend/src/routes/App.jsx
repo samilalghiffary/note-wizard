@@ -1,10 +1,10 @@
 import Notes from '@/pages/notes/Home';
 import Trash from '@/pages/notes/Trash';
 import Archive from '@/pages/notes/Archive';
-import Collaboration from '@/pages/notes/Collabs';
-import MobileHome from '@/pages/auth/mobile/Index';
-import MobileAuth from '@/pages/auth/mobile/MobileAuth';
 import { useToken } from '@/utils/context/Token';
+import Collaboration from '@/pages/notes/Collabs';
+import MobileIndex from '@/pages/auth/mobile/Index';
+import MobileAuth from '@/pages/auth/mobile/MobileAuth';
 import DesktopAuth from '@/pages/auth/desktop/DesktopAuth';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ const App = () => {
       ) : isDesktop ? (
         <DesktopAuth isLogin={true} />
       ) : (
-        <MobileHome />
+        <MobileIndex />
       ),
     },
     {
