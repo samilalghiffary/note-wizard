@@ -1,5 +1,4 @@
 import { useNotes } from '@/utils/context/Notes';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 const ModalAddCollaborator = ({ openModal, closeModal, id }) => {
@@ -11,11 +10,8 @@ const ModalAddCollaborator = ({ openModal, closeModal, id }) => {
   } = useForm();
   const { addCollaborator } = useNotes();
 
-  useEffect(() => {
-    setValue('noteId', id);
-  }, [id]);
-
   const onAddCollaboratorHandler = (data) => {
+    setValue('noteId', id);
     const { noteId, userId } = data;
     addCollaborator(noteId, userId);
   };
