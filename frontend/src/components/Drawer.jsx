@@ -11,7 +11,7 @@ const Drawer = ({ children, currentPage }) => {
       <div className="drawer-content">{children}</div>
       <div className="drawer-side z-10">
         <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
-        <ul className="menu px-4 w-60 h-full bg-secondary-focus">
+        <ul className="menu px-4 w-60 h-full bg-primary">
           <div className="container p-1 gap-2 flex flex-row justify-start items-center">
             <img src={wizardIcon} className="w-12 h-12 rounded" alt="logo" />
             <h3 className="text-xl font-bold align-middle">Note Wizard</h3>

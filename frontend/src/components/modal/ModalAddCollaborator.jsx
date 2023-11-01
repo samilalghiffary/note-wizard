@@ -22,8 +22,8 @@ const ModalAddCollaborator = ({ openModal, closeModal, id }) => {
 
   return (
     <div>
-      <dialog className={`modal bg-secondary ${openModal ? 'modal-open' : ''}`}>
-        <div className="modal-box w-80 bg-secondary">
+      <dialog className={`modal bg-primary ${openModal ? 'modal-open' : ''}`}>
+        <div className="modal-box w-80 bg-primary">
           <h3 className="font-bold text-lg">Add collaborator</h3>
           <form onSubmit={handleSubmit(onAddCollaboratorHandler)}>
             <div className="form-control w-full">
@@ -48,10 +48,10 @@ const ModalAddCollaborator = ({ openModal, closeModal, id }) => {
               <input type="text" className="hidden" {...register('noteId')} />
             </div>
             <div className="modal-action">
-              <button className="btn btn-sm btn-primary normal-case">Add Collaboration</button>
+              <button className="btn btn-sm btn-neutral normal-case">Add Collaboration</button>
               <button
                 onClick={closeModal}
-                className="btn btn-sm btn-primary btn-outline normal-case"
+                className="btn btn-sm btn-neutral btn-outline normal-case"
               >
                 Close
               </button>

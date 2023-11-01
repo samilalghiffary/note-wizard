@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 
-const ModalAddNote = ({ openModal, closeModal, addNote }) => {
+const ModalAddNote = ({ openModal, closeModal, addNote, isLoading }) => {
   const {
     register,
     handleSubmit,
@@ -12,7 +12,7 @@ const ModalAddNote = ({ openModal, closeModal, addNote }) => {
       <dialog id="input-modal" className={`modal ${openModal ? 'modal-open' : ''}`}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Add note</h3>
-          <form onSubmit={handleSubmit(addNote)} className="flex flex-col gap-2">
+          <form onSubmit={handleSubmit(addNote)} className="flex flex-col gap-1">
             <div className="form-control w-full">
               <label className="label">
                 <span className={`label-text ${errors.title ? 'text-error' : ''}`}>Title</span>
@@ -46,17 +46,22 @@ const ModalAddNote = ({ openModal, closeModal, addNote }) => {
                 </span>
               </label>
             </div>
-            <div className="modal-action">
-              <button type="submit" className="btn btn-sm btn-secondary w-20">
-                Submit
-              </button>
-              <button
-                type="reset"
-                onClick={closeModal}
-                className="btn btn-sm btn-outline btn-secondary w-20"
-              >
-                Cancel
-              </button>
+            <div className="justify-between flex">
+              <div className="flex gap-2">
+                <button type="submit" className="btn btn-sm btn-neutral w-20 normal-case">
+                  {isLoading ? (
+                    <span className="loading loading-spinner loading-sm"></span>
+                  ) : (
+                    'Submit'
+                  )}
+                </button>
+                <div
+                  onClick={closeModal}
+                  className="btn btn-sm btn-outline btn-neutral w-20 normal-case"
+                >
+                  Cancel
+                </div>
+              </div>
             </div>
           </form>
         </div>
