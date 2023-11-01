@@ -1,14 +1,8 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
-import FormPanel from '../desktop/components/FormPanel';
+import FormPanel from '../components/FormPanel';
 
 const MobileAuth = ({ isLogin }) => {
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'halloween';
-    document.querySelector('html').setAttribute('data-theme', savedTheme);
-  });
-
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-base-200">
       <div className="fixed top-0 left-0">
