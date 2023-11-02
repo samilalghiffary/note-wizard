@@ -1,5 +1,6 @@
 import { useNotes } from '@/utils/context/Notes';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 const ModalAddCollaborator = ({ openModal, closeModal, id }) => {
   const {
@@ -8,18 +9,26 @@ const ModalAddCollaborator = ({ openModal, closeModal, id }) => {
     setValue,
     formState: { errors },
   } = useForm();
-  const { addCollaborator } = useNotes();
+  const { addCollaborator, getUserId } = useNotes();
 
-  const onAddCollaboratorHandler = (data) => {
+  const onAddCollaboratorHandler = async (data) => {
     setValue('noteId', id);
-    const { noteId, userId } = data;
-    addCollaborator(noteId, userId);
+    const { username, noteId } = data;
+    console.log(username, noteId);
+    try {
+      const user = await getUserId(username);
+      const userId = user.id;
+      const respone = await addCollaborator(noteId, userId);
+      toast.success(respone);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
     <div>
-      <dialog className={`modal bg-primary ${openModal ? 'modal-open' : ''}`}>
-        <div className="modal-box w-80 bg-primary">
+      <dialog className={`modal ${openModal ? 'modal-open' : ''}`}>
+        <div className="modal-box w-96">
           <h3 className="font-bold text-lg">Add collaborator</h3>
           <form onSubmit={handleSubmit(onAddCollaboratorHandler)}>
             <div className="form-control w-full">
@@ -33,7 +42,7 @@ const ModalAddCollaborator = ({ openModal, closeModal, id }) => {
                 placeholder="Type here"
                 className={`input input-md input-bordered ${
                   errors.username ? 'input-error' : ''
-                } w-full bg-inherit `}
+                } w-full `}
                 {...register('username', { required: 'Username is required' })}
               />
               <label className="label">

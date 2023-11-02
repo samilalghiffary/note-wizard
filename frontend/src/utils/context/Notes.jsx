@@ -128,12 +128,33 @@ export const NotesProvider = ({ children }) => {
     });
   };
 
+  const getUserId = (username) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axiosWithConfig.get('/users', {
+          params: {
+            username,
+          },
+        });
+        const user = response.data.data.users[0];
+        if (user.length === 0) {
+          reject(new Error('Username not found'));
+        } else {
+          resolve(user);
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
   return (
     <NotesContext.Provider
       value={{
         notes,
         addNote,
         editNote,
+        getUserId,
         deleteNote,
         getNoteById,
         addCollaborator,
