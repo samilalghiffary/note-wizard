@@ -1,41 +1,40 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useToken } from '@/utils/context/Token';
 import { Link, useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useToken } from '@/utils/context/Token';
 import { loginSchema, registerSchema } from '@/utils/validator/authSchema';
 
 const FormPanel = ({ isLogin }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const {
-    register,
     reset,
+    register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(isLogin ? loginSchema : registerSchema) });
 
-  const { login, authRegister } = useToken();
+  const { authLogin, authRegister } = useToken();
 
   const onSubmitHandler = async (data) => {
     const { username, password, fullname } = data;
 
     try {
-      let message;
-
       if (!isLogin) {
-        message = await authRegister(username, password, fullname);
+        const message = await authRegister(username, password, fullname);
+        alert(message);
         reset();
         navigate('/login');
       } else {
-        message = await login(username, password);
+        const message = await authLogin(username, password);
+        alert(message);
         navigate('/notes');
       }
-
-      alert(message);
     } catch (error) {
-      alert(error);
-      reset();
+      if (error === 'Kredensial yang Anda berikan salah') {
+        alert('Incorrect username and password');
+      }
     }
   };
 
@@ -150,11 +149,11 @@ const FormPanel = ({ isLogin }) => {
               type="checkbox"
               id="show-password-toggle"
               onChange={onShowPasswordHandler}
-              className="toggle toggle-secondary toggle-sm"
+              className="toggle toggle-primary toggle-sm"
             />
           </label>
         </div>
-        <button type="submit" className="btn lg:btn-sm btn-secondary w-full normal-case">
+        <button type="submit" className="btn lg:btn-sm btn-neutral w-full normal-case">
           {isLogin ? 'Login' : 'Register'}
         </button>
       </form>

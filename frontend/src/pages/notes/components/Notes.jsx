@@ -1,17 +1,14 @@
+import SkeletonNotes from '@/components/skeleton/SkeletonNotes';
 import CardList from './CardList';
 import EmptyNote from './EmptyNote';
-import {
-  BsFilterLeft,
-  BsSortAlphaDown,
-  BsSortAlphaUpAlt,
-  BsSortNumericDownAlt,
-  BsSortNumericUpAlt,
-} from 'react-icons/bs';
+import { BsFilterLeft, BsSortNumericDownAlt, BsSortNumericUpAlt } from 'react-icons/bs';
 
-const Notes = ({ notes, heading, paragraph, emptyNoteImage, onNoteClick }) => {
+const Notes = ({ notes, heading, paragraph, emptyNoteImage, openModal }) => {
   return (
     <>
-      {notes.length === 0 ? (
+      {notes === null ? (
+        <SkeletonNotes />
+      ) : notes.length === 0 ? (
         <EmptyNote emptyNoteImage={emptyNoteImage} paragraph={paragraph} heading={heading} />
       ) : (
         <div className="container min-h-screen flex gap-4 flex-col p-5">
@@ -28,16 +25,6 @@ const Notes = ({ notes, heading, paragraph, emptyNoteImage, onNoteClick }) => {
               >
                 <li>
                   <a className="flex justify-between">
-                    Title descending <BsSortAlphaDown className="w-6 h-6" />
-                  </a>
-                </li>
-                <li>
-                  <a className="flex justify-between">
-                    Title ascending <BsSortAlphaUpAlt className="w-6 h-6" />
-                  </a>
-                </li>
-                <li>
-                  <a className="flex justify-between">
                     Date descending <BsSortNumericDownAlt className="w-6 h-6" />
                   </a>
                 </li>
@@ -49,7 +36,7 @@ const Notes = ({ notes, heading, paragraph, emptyNoteImage, onNoteClick }) => {
               </ul>
             </div>
           </div>
-          <CardList onNoteClick={onNoteClick} notes={notes} />
+          <CardList openModal={openModal} notes={notes} />
         </div>
       )}
     </>

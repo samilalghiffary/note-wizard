@@ -6,7 +6,7 @@ const NotesContext = createContext();
 
 export const NotesProvider = ({ children }) => {
   const { accessToken } = useToken();
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(null);
 
   useEffect(() => {
     getNotes(accessToken, setNotes);
@@ -25,59 +25,70 @@ export const NotesProvider = ({ children }) => {
     }
   };
 
-  const addNote = async (title, body) => {
-    try {
-      const response = await axiosWithConfig.post(
-        '/notes',
-        {
-          title,
-          body,
-        },
-        {
+  const addNote = (title, body) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axiosWithConfig.post(
+          '/notes',
+          {
+            title,
+            body,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        resolve('Added note successfully');
+        const noteId = response.data.data.noteId;
+        const newNote = await getNoteById(noteId);
+        setNotes((prevNotes) => [...prevNotes, newNote]);
+      } catch (error) {
+        reject('Failed to adding note');
+        console.error('Gagal menambahkan catatan', error);
+      }
+    });
+  };
+
+  const deleteNote = (noteId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await axiosWithConfig.delete(`/notes/${noteId}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        }
-      );
-      const noteId = response.data.data.noteId;
-      const newNote = await getNoteById(noteId);
-      setNotes((prevNotes) => [...prevNotes, newNote]);
-    } catch (error) {
-      console.error('Gagal menambahkan catatan', error);
-    }
+        });
+        resolve('Delete note successfully');
+        setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+      } catch (error) {
+        reject(error.response.data.message);
+      }
+    });
   };
 
-  const deleteNote = async (noteId) => {
-    try {
-      await axiosWithConfig.delete(`/notes/${noteId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
-    } catch (error) {
-      console.error('Gagal menghapus catatan', error);
-    }
-  };
-
-  const editNote = async (noteId, title, body) => {
-    try {
-      await axiosWithConfig.put(
-        `/notes/${noteId}`,
-        { title, body },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      const updatedNotes = notes.map((note) =>
-        note.id === noteId ? { ...note, title, body } : note
-      );
-      setNotes(updatedNotes);
-    } catch (error) {
-      console.error('Gagal mengubah catatan', error);
-    }
+  const editNote = (noteId, title, body) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await axiosWithConfig.put(
+          `/notes/${noteId}`,
+          { title, body },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        resolve('Edit note successfully');
+        const updatedNotes = notes.map((note) =>
+          note.id === noteId ? { ...note, title, body } : note
+        );
+        setNotes(updatedNotes);
+      } catch (error) {
+        reject('Failed to edit note');
+        console.error('Gagal mengubah catatan', error);
+      }
+    });
   };
 
   const getNoteById = async (id) => {
@@ -91,33 +102,63 @@ export const NotesProvider = ({ children }) => {
       return note;
     } catch (error) {
       console.error('Gagal mengambil detail catatan', error);
-      throw error;
     }
   };
 
   const addCollaborator = async (noteId, userId) => {
-    try {
-      const response = await axiosWithConfig.post(
-        '/collaborations',
-        {
-          noteId,
-          userId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
+    return new Promise(async (resolve, reject) => {
+      try {
+        await axiosWithConfig.post(
+          '/collaborations',
+          {
+            noteId,
+            userId,
           },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        resolve('Collaboration added successfully');
+      } catch (error) {
+        reject('Failed adding collaboration');
+        console.error(error);
+      }
+    });
+  };
+
+  const getUserId = (username) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axiosWithConfig.get('/users', {
+          params: {
+            username,
+          },
+        });
+        const user = response.data.data.users[0];
+        if (user.length === 0) {
+          reject(new Error('Username not found'));
+        } else {
+          resolve(user);
         }
-      );
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
+      } catch (error) {
+        reject(error);
+      }
+    });
   };
 
   return (
     <NotesContext.Provider
-      value={{ notes, getNotes, addNote, deleteNote, editNote, getNoteById, addCollaborator }}
+      value={{
+        notes,
+        addNote,
+        editNote,
+        getUserId,
+        deleteNote,
+        getNoteById,
+        addCollaborator,
+      }}
     >
       {children}
     </NotesContext.Provider>

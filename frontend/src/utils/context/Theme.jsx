@@ -2,8 +2,10 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext();
 
+const initialTheme = localStorage.getItem('theme') || 'dark';
+
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('halloween');
+  const [theme, setTheme] = useState(initialTheme);
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
@@ -12,7 +14,7 @@ export const ThemeProvider = ({ children }) => {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'halloween' ? 'pastel' : 'halloween'));
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
 
   return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;

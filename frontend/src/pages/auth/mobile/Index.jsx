@@ -22,10 +22,10 @@ const Index = () => {
         </p>
       </div>
       <div className="w-11/12 flex flex-col gap-3 justify-self-end">
-        <Link to="/login" className="btn btn-secondary normal-case">
+        <Link to="/login" className="btn btn-neutral normal-case">
           Login
         </Link>
-        <Link to="/register" className="btn btn-secondary btn-outline normal-case">
+        <Link to="/register" className="btn btn-neutral btn-outline normal-case">
           Register
         </Link>
       </div>

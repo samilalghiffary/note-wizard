@@ -1,27 +1,64 @@
-import { useNotes } from '@/utils/context/Notes';
+import OpenAI from 'openai';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
-const ModalInput = ({ isAddNote, onAddNoteClose }) => {
+const openai = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
+
+const ModalAddNote = ({ openModal, closeModal, addNote, isLoading }) => {
+  const [generateResume, setGenerateResume] = useState(false);
   const {
-    reset,
+    watch,
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { addNote } = useNotes();
 
-  const onAddNoteSubmitted = async (data) => {
-    const { title, body } = data;
-    addNote(title, body);
-    reset();
+  const generatingResume = async (prompt) => {
+    try {
+      const response = await openai.chat.completions.create({
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Anda adalah pembuat rangkuman, anda akan diberikan catatan dan tugas anda adalah merangkum catatan tersebut dengan singkat, padat dan jelas',
+          },
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+        model: 'gpt-3.5-turbo',
+      });
+      const resume = response.choices[0].message.content;
+      setValue('body', resume);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setGenerateResume(false);
+    }
+  };
+
+  const onGenerateResumeHandler = async () => {
+    setGenerateResume(true);
+    const prompt = watch('body');
+    toast.promise(generatingResume(prompt), {
+      loading: 'Generating resume',
+      success: 'Successfully generating resume',
+      error: 'Error occurs when generating resume, please try again',
+    });
   };
 
   return (
     <>
-      <dialog id="input-modal" className={`modal ${isAddNote ? 'modal-open' : ''}`}>
+      <dialog id="input-modal" className={`modal ${openModal ? 'modal-open' : ''}`}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Add note</h3>
-          <form onSubmit={handleSubmit(onAddNoteSubmitted)} className="flex flex-col gap-2">
+          <form onSubmit={handleSubmit(addNote)} className="flex flex-col gap-1">
             <div className="form-control w-full">
               <label className="label">
                 <span className={`label-text ${errors.title ? 'text-error' : ''}`}>Title</span>
@@ -45,7 +82,9 @@ const ModalInput = ({ isAddNote, onAddNoteClose }) => {
               <textarea
                 placeholder="Type here"
                 {...register('body', { required: 'Body is required' })}
-                className={`textarea textarea-bordered ${errors.body ? 'textarea-error' : ''}`}
+                className={`textarea textarea-md text-md h-32 textarea-bordered ${
+                  errors.body ? 'textarea-error' : ''
+                }`}
               ></textarea>
               <label className="label">
                 <span className="label-text-alt text-error">
@@ -53,17 +92,29 @@ const ModalInput = ({ isAddNote, onAddNoteClose }) => {
                 </span>
               </label>
             </div>
-            <div className="modal-action">
-              <button type="submit" className="btn btn-sm btn-secondary w-20">
-                Submit
-              </button>
-              <button
-                type="reset"
-                onClick={onAddNoteClose}
-                className="btn btn-sm btn-outline btn-secondary w-20"
-              >
-                Cancel
-              </button>
+            <div className="flex justify-between">
+              <div onClick={onGenerateResumeHandler} className="btn btn-neutral btn-sm normal-case">
+                {generateResume ? (
+                  <span className="loading loading-spinner loading-sm"></span>
+                ) : (
+                  'Generate resume'
+                )}
+              </div>
+              <div className="flex gap-1">
+                <button type="submit" className="btn btn-sm btn-neutral w-20 normal-case">
+                  {isLoading ? (
+                    <span className="loading loading-spinner loading-sm"></span>
+                  ) : (
+                    'Submit'
+                  )}
+                </button>
+                <div
+                  onClick={closeModal}
+                  className="btn btn-sm btn-outline btn-neutral w-20 normal-case"
+                >
+                  Cancel
+                </div>
+              </div>
             </div>
           </form>
         </div>
@@ -72,4 +123,4 @@ const ModalInput = ({ isAddNote, onAddNoteClose }) => {
   );
 };
 
-export default ModalInput;
+export default ModalAddNote;
