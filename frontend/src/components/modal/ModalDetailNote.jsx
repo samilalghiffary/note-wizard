@@ -50,12 +50,12 @@ const ModalDetailNote = ({
   return (
     <>
       <dialog className={`modal ${openModal ? 'modal-open' : ''}`}>
-        <div className="card w-11/12 lg:w-96 max-h-96 card-compact bg-primary">
+        <div className="card w-11/12 lg:w-2/4 card-compact bg-primary">
           <form onSubmit={handleSubmit(editNote)}>
             {isLoading ? (
               <SkeletonCardDetail />
             ) : (
-              <div className="card-body">
+              <div className="card-body flex flex-col items-stretch h-full">
                 <div id={id} className="card-title justify-between">
                   <input
                     {...register('title')}
@@ -64,8 +64,9 @@ const ModalDetailNote = ({
                   />
                 </div>
                 <textarea
+                  spellCheck={false}
                   autoFocus
-                  className="textarea text-lg h-28 p-0 bg-primary rounded-none focus:outline-none resize-none"
+                  className="textarea text-lg h-52 p-0 bg-primary rounded-none focus:outline-none resize-none"
                   {...register('body')}
                 ></textarea>
                 <div className="flex">
