@@ -1,6 +1,6 @@
 const SkeletonCard = () => {
   return (
-    <div className="card bg-gray-400 card-compact">
+    <div className="card bg-gray-300 card-compact">
       <div className="card-body h-52 gap-3">
         <div className="card-title justify-between">
           <div className="h-5 w-20 rounded-full bg-gray-200"></div>
