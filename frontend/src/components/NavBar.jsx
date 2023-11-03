@@ -56,9 +56,7 @@ const NavBar = ({ searchNote }) => {
         <div className="basis-1/5 lg:basis-2/6 flex gap-2 justify-end">
           <button onClick={onThemeChange} className="btn hidden md:block btn-circle btn-ghost">
             <label
-              className={`w-full h-full swap swap-rotate ${
-                theme === 'halloween' ? 'swap-active' : ''
-              } `}
+              className={`w-full h-full swap swap-rotate ${theme === 'dark' ? 'swap-active' : ''} `}
             >
               <SunIcon className="swap-on fill-current w-7 h-7" />
               <MoonIcon className="swap-off fill-current w-7 h-7" />
@@ -67,7 +65,6 @@ const NavBar = ({ searchNote }) => {
 
           <div className="dropdown dropdown-end">
             <div className="container flex items-center gap-1 md:gap-2">
-              {/* <p className="text-sm md:text-base font-medium block">Samil</p> */}
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
                   <img className="image-full" src={wizardAvatar} />
