@@ -46,7 +46,6 @@ export const NotesProvider = ({ children }) => {
         setNotes((prevNotes) => [...prevNotes, newNote]);
       } catch (error) {
         reject('Failed to adding note');
-        console.error('Gagal menambahkan catatan', error);
       }
     });
   };
@@ -62,7 +61,7 @@ export const NotesProvider = ({ children }) => {
         resolve('Delete note successfully');
         setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
       } catch (error) {
-        reject(error.response.data.message);
+        reject('Failed to delete note');
       }
     });
   };
@@ -86,7 +85,6 @@ export const NotesProvider = ({ children }) => {
         setNotes(updatedNotes);
       } catch (error) {
         reject('Failed to edit note');
-        console.error('Gagal mengubah catatan', error);
       }
     });
   };
@@ -101,7 +99,7 @@ export const NotesProvider = ({ children }) => {
       const note = response.data.data.note;
       return note;
     } catch (error) {
-      console.error('Gagal mengambil detail catatan', error);
+      console.error('Failed to get detail note', error);
     }
   };
 
@@ -122,8 +120,7 @@ export const NotesProvider = ({ children }) => {
         );
         resolve('Collaboration added successfully');
       } catch (error) {
-        reject('Failed adding collaboration');
-        console.error(error);
+        reject('Failed to adding collaboration');
       }
     });
   };
@@ -143,7 +140,7 @@ export const NotesProvider = ({ children }) => {
           resolve(user);
         }
       } catch (error) {
-        reject(error);
+        console.error(error);
       }
     });
   };

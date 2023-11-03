@@ -1,4 +1,5 @@
 import { useNotes } from '@/utils/context/Notes';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -11,8 +12,11 @@ const ModalAddCollaborator = ({ openModal, closeModal, id }) => {
   } = useForm();
   const { addCollaborator, getUserId } = useNotes();
 
-  const onAddCollaboratorHandler = async (data) => {
+  useEffect(() => {
     setValue('noteId', id);
+  }, [setValue, id]);
+
+  const onAddCollaboratorHandler = async (data) => {
     const { username, noteId } = data;
     console.log(username, noteId);
     try {
